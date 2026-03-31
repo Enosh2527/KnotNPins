@@ -1,0 +1,8 @@
+name = "knot-and-pins-app"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-03-31"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "knot-db"
+database_id = "" # Will be populated after wrangler d1 create
