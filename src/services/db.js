@@ -61,6 +61,20 @@ export const deleteExpense = async (id) => {
 };
 
 // Initialize Dummy Data (Server keeps it simple but let's do this sequentially if empty)
+export const getSettings = async () => {
+  const res = await fetch('/api/settings');
+  return handleResponse(res);
+};
+
+export const updateSettings = async (settings) => {
+  const res = await fetch('/api/settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings)
+  });
+  return handleResponse(res);
+};
+
 export const seedDummyData = async () => {
   try {
     const p = await getPurchases();

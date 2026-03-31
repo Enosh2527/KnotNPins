@@ -8,7 +8,7 @@ import InventoryStatus from './components/InventoryStatus';
 import DataImport from './components/DataImport';
 import ProfitView from './components/ProfitView';
 import ChartsView from './components/ChartsView';
-import Login from './components/Login';
+import SettingsView from './components/SettingsView';
 import { seedDummyData } from './services/db';
 import { Toaster } from 'react-hot-toast';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -70,6 +70,8 @@ function App() {
         return <ProfitView />
       case 'charts':
         return <ChartsView />
+      case 'settings':
+        return <SettingsView />;
       default:
         return <Dashboard />
     }
@@ -116,9 +118,13 @@ function App() {
             <span style={{ fontSize: '1.25rem', marginBottom: '4px' }}>💰</span>
             Profit
           </li>
-          <li className={activeTab === 'charts' ? 'active' : ''} onClick={() => setActiveTab('charts')}>
-            <span style={{ fontSize: '1.25rem', marginBottom: '4px' }}>📈</span>
-            Charts
+          <li className={activeTab === 'settings' ? 'active' : ''} onClick={() => {
+            const pwd = window.prompt('Enter admin password to access Settings');
+            if (pwd === 'admin123') setActiveTab('settings');
+            else alert('Incorrect password');
+          }}>
+            <span style={{ fontSize: '1.25rem', marginBottom: '4px' }}>⚙️</span>
+            Settings
           </li>
         </ul>
       </nav>

@@ -31,3 +31,11 @@ CREATE TABLE expenses (
   description TEXT,
   createdAt TEXT
 );
+
+CREATE TABLE IF NOT EXISTS app_settings (
+  key_name TEXT PRIMARY KEY,
+  value_json TEXT
+);
+INSERT OR IGNORE INTO app_settings (key_name, value_json) VALUES ('salesSources', '["Offline", "Online", "Stall 1", "Stall 2", "Stall 3"]');
+INSERT OR IGNORE INTO app_settings (key_name, value_json) VALUES ('paymentMethods', '["UPI", "Cash", "Card", "Other"]');
+INSERT OR IGNORE INTO app_settings (key_name, value_json) VALUES ('expenseCategories', '["Raw Materials", "Packaging", "Shipping", "Marketing", "Rent/Stall Fee", "Other"]');
