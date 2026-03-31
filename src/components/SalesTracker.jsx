@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getSales, addSale, deleteSale, getPurchases } from '../services/db';
+import { getSales, addSale, deleteSale, getPurchases, getSettings } from '../services/db';
 import toast from 'react-hot-toast';
 import AnimatedList from './AnimatedList';
 import * as XLSX from 'xlsx';
@@ -11,6 +11,7 @@ export default function SalesTracker() {
   const [bulkPreview, setBulkPreview] = useState([]);
   const [bulkUploading, setBulkUploading] = useState(false);
   const fileInputRef = useRef(null);
+  const [settings, setSettings] = useState({ salesSources: ['Offline', 'Online', 'Stall 1'], paymentMethods: ['UPI', 'Cash', 'Card'] });
 
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
@@ -26,6 +27,12 @@ export default function SalesTracker() {
     getPurchases().then(purchases => {
       const uniqueItems = [...new Set(purchases.map(p => p.itemName))];
       setAvailableItems(uniqueItems);
+    }).catch(console.error);
+    getSettings().then(data => {
+      setSettings({
+        salesSources: data.salesSources?.length ? data.salesSources : ['Offline', 'Online', 'Stall 1'],
+        paymentMethods: data.paymentMethods?.length ? data.paymentMethods : ['UPI', 'Cash', 'Card']
+      });
     }).catch(console.error);
   };
 
@@ -322,20 +329,13 @@ export default function SalesTracker() {
                 <div className="form-group" style={{ flex: '1 1 100px' }}>
                   <label className="form-label">Method</label>
                   <select className="form-control" name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
-                    <option value="UPI">UPI</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Card">Card</option>
-                    <option value="Other">Other</option>
+                    {settings.paymentMethods.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
                 </div>
                 <div className="form-group" style={{ flex: '1 1 100px' }}>
                   <label className="form-label">Source</label>
                   <select className="form-control" name="source" value={formData.source} onChange={handleChange}>
-                    <option value="Offline">Offline</option>
-                    <option value="Online">Online</option>
-                    <option value="Stall 1">Stall 1</option>
-                    <option value="Stall 2">Stall 2</option>
-                    <option value="Stall 3">Stall 3</option>
+                    {settings.salesSources.map(s => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
               </div>
@@ -405,11 +405,7 @@ export default function SalesTracker() {
                       <select onChange={(e) => { updateAllSources(e.target.value); e.target.value = ""; }} defaultValue=""
                         style={{ border: 'none', background: 'transparent', color: 'var(--text-main)', fontSize: '0.78rem', cursor: 'pointer', outline: 'none', fontWeight: 600 }}>
                         <option value="" disabled>Select Source</option>
-                        <option value="Offline">Offline</option>
-                        <option value="Online">Online</option>
-                        <option value="Stall 1">Stall 1</option>
-                        <option value="Stall 2">Stall 2</option>
-                        <option value="Stall 3">Stall 3</option>
+                        {settings.salesSources.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
                     <button onClick={() => setBulkPreview([])} style={{
@@ -462,20 +458,13 @@ export default function SalesTracker() {
                           <td style={{ padding: '0.5rem 0.4rem', textAlign: 'center' }}>
                             <select value={item.paymentMethod} onChange={(e) => updateBulkItem(i, 'paymentMethod', e.target.value)}
                               style={{ border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.25rem 0.3rem', fontSize: '0.78rem', background: 'transparent', color: 'var(--text-main)', cursor: 'pointer' }}>
-                              <option value="UPI">UPI</option>
-                              <option value="Cash">Cash</option>
-                              <option value="Card">Card</option>
-                              <option value="Other">Other</option>
+                              {settings.paymentMethods.map(m => <option key={m} value={m}>{m}</option>)}
                             </select>
                           </td>
                           <td style={{ padding: '0.5rem 0.4rem', textAlign: 'center' }}>
-                            <select value={item.source || 'Offline'} onChange={(e) => updateBulkItem(i, 'source', e.target.value)}
+                            <select value={item.source || settings.salesSources[0]} onChange={(e) => updateBulkItem(i, 'source', e.target.value)}
                               style={{ border: '1px solid var(--border-color)', borderRadius: '8px', padding: '0.25rem 0.3rem', fontSize: '0.78rem', background: 'transparent', color: 'var(--text-main)', cursor: 'pointer' }}>
-                              <option value="Offline">Offline</option>
-                              <option value="Online">Online</option>
-                              <option value="Stall 1">Stall 1</option>
-                              <option value="Stall 2">Stall 2</option>
-                              <option value="Stall 3">Stall 3</option>
+                              {settings.salesSources.map(s => <option key={s} value={s}>{s}</option>)}
                             </select>
                           </td>
                         </tr>

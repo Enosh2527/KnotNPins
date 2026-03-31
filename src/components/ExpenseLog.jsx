@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getExpenses, addExpense, deleteExpense } from '../services/db';
+import { getExpenses, addExpense, deleteExpense, getSettings } from '../services/db';
 import toast from 'react-hot-toast';
 import {
   SwipeableList,
@@ -11,6 +11,7 @@ import 'react-swipeable-list/dist/styles.css';
 
 export default function ExpenseLog() {
   const [expenses, setExpenses] = useState([]);
+  const [settings, setSettings] = useState({ expenseCategories: ['Travel', 'Food', 'Packaging', 'Other'] });
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     category: 'Travel',
@@ -20,6 +21,11 @@ export default function ExpenseLog() {
 
   const loadData = () => {
     getExpenses().then(setExpenses).catch(() => toast.error('Failed to load expenses'));
+    getSettings().then(data => {
+      setSettings({
+        expenseCategories: data.expenseCategories?.length ? data.expenseCategories : ['Travel', 'Food', 'Packaging', 'Other']
+      });
+    }).catch(console.error);
   };
 
   useEffect(() => {
@@ -66,11 +72,7 @@ export default function ExpenseLog() {
             <div className="form-group" style={{ flex: '1 1 150px' }}>
               <label className="form-label">Category</label>
               <select className="form-control" name="category" value={formData.category} onChange={handleChange} required>
-                <option value="Travel">Travel (Auto, Petrol)</option>
-                <option value="Food">Food / Lunch</option>
-                <option value="Stall Fee">Stall Rent</option>
-                <option value="Packaging">Packaging</option>
-                <option value="Other">Other</option>
+                {settings.expenseCategories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div className="form-group" style={{ flex: '1 1 100px' }}>
