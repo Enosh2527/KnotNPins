@@ -10,6 +10,7 @@ import ProfitView from './components/ProfitView';
 import ChartsView from './components/ChartsView';
 import SettingsView from './components/SettingsView';
 import Login from './components/Login';
+import { DotGrid, Orb } from './components/MagicUI';
 import { seedDummyData } from './services/db';
 import { Toaster } from 'react-hot-toast';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -132,18 +133,22 @@ function App() {
 
       <main className="main-content">
         <PullToRefresh onRefresh={handleRefresh} style={{ minHeight: '100%' }}>
-          <header className="page-header">
-            <div>
+          <header className="page-header" style={{ position: 'relative', overflow: 'hidden' }}>
+            <DotGrid opacity={0.6} />
+            <Orb top="-50px" left="-50px" size="200px" color="rgba(139, 92, 246, 0.15)" delay={0.2} />
+            <Orb bottom="-50px" right="10%" size="150px" color="rgba(207, 181, 59, 0.15)" delay={0.8} />
+            
+            <div style={{ position: 'relative', zIndex: 1 }}>
               <h1>Knot & Pins</h1>
               <p className="subtitle">Inventory & Expense Manager</p>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div className="logo-badge">
-                <img src="/logo.png" alt="Knot & Pins" />
-              </div>
-              <button className="theme-toggle" onClick={() => setIsDarkTheme(!isDarkTheme)} title="Toggle Dark Mode">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+              <button className="theme-toggle" onClick={() => setIsDarkTheme(!isDarkTheme)} title="Toggle Dark Mode" style={{ marginRight: '8px' }}>
                 {isDarkTheme ? '☀️' : '🌙'}
               </button>
+              <div className="logo-badge" style={{ boxShadow: '0 4px 15px rgba(207, 181, 59, 0.2)' }}>
+                <img src="/logo.png" alt="Knot & Pins" />
+              </div>
             </div>
           </header>
 
