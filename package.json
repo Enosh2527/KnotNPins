@@ -4,16 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "server": "node server/index.js",
     "dev": "vite",
-    "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
+    "pages:dev": "wrangler pages dev dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "chart.js": "^4.5.1",
-    "concurrently": "^9.2.1",
     "motion": "^12.38.0",
     "prop-types": "^15.8.1",
     "react": "^19.2.4",
