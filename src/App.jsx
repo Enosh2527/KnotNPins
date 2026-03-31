@@ -9,6 +9,7 @@ import DataImport from './components/DataImport';
 import ProfitView from './components/ProfitView';
 import ChartsView from './components/ChartsView';
 import SettingsView from './components/SettingsView';
+import Login from './components/Login';
 import { seedDummyData } from './services/db';
 import { Toaster } from 'react-hot-toast';
 import PullToRefresh from 'react-simple-pull-to-refresh';
